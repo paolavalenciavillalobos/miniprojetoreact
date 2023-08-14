@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import Products from './paginas/products'
-import Header from '../components/header'
-import Footer from '../components/footer'
 import Carrinho from './paginas/carrinho'
 import Finalizarcompra from './paginas/finalizarcompra'
-import './App.css'
+import productsJSON from './assets/products.json';
+
 
 export const teias = {
   Products: 'products',
@@ -15,16 +14,28 @@ export const teias = {
 function App() {
 
   const [ screen, setScreen ] = useState(teias.Products)
+  const [ productos, setProdutos] = useState(productsJSON)
+  const [ cart, setCart] = useState([])
+
+  const addCarrinho = (item) => {
+    
+    setCart([
+      ...cart,{
+        ...item,
+        quantidade: 1
+      }
+    ])
+  }
 
   if (screen === teias.Products) {
-    return <Products changeScreen={setScreen} />
+    return <Products changeScreen={setScreen} productos={productos} addCarrinho={addCarrinho} cart={cart} />
   }
   
   if (screen === teias.Carrinho) {
-    return <Carrinho changeScreen={setScreen} />
+    return <Carrinho changeScreen={setScreen} cart={cart} setCart={setCart}/>
   }
 
-  return <Finalizarcompra changeScreen={setScreen}/>
+  return <Finalizarcompra changeScreen={setScreen} cart={cart}/>
   
 
 }
