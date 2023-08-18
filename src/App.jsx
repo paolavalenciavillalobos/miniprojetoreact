@@ -3,6 +3,7 @@ import Products from './paginas/products'
 import Carrinho from './paginas/carrinho'
 import Finalizarcompra from './paginas/finalizarcompra'
 import productsJSON from './assets/products.json';
+import GlobalStyle from '../stylecomponents/globalstyle'
 
 
 export const teias = {
@@ -18,7 +19,11 @@ function App() {
   const [ cart, setCart] = useState([])
 
   const addCarrinho = (item) => {
-    
+    const productExists = cart.some((product) => product.id === item.id);
+    // Si el producto ya existe no add
+    if (productExists) {
+      return;
+    }
     setCart([
       ...cart,{
         ...item,
@@ -27,17 +32,20 @@ function App() {
     ])
   }
 
-  if (screen === teias.Products) {
-    return <Products changeScreen={setScreen} productos={productos} addCarrinho={addCarrinho} cart={cart} />
-  }
-  
-  if (screen === teias.Carrinho) {
-    return <Carrinho changeScreen={setScreen} cart={cart} setCart={setCart}/>
-  }
-
-  return <Finalizarcompra changeScreen={setScreen} cart={cart}/>
-  
-
+  return (
+    <>
+      <GlobalStyle /> 
+      {screen === teias.Products && (
+        <Products changeScreen={setScreen} productos={productos} addCarrinho={addCarrinho} cart={cart} />
+      )}
+      {screen === teias.Carrinho && (
+        <Carrinho changeScreen={setScreen} cart={cart} setCart={setCart} />
+      )}
+      {screen === teias.Finalizarcompra && (
+        <Finalizarcompra changeScreen={setScreen} cart={cart} />
+      )}
+    </>
+  );
 }
 
 export default App
